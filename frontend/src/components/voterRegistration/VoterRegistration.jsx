@@ -4,16 +4,20 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import { useDispatch } from 'react-redux'
+import {submitVoter} from '../../redux/reducers/voterSlice'
 import useStyles from './styles'
 
 const VoterRegistration = () => {
-    const [warning, setWarning] = React.useState(false)
+    const [warning, setWarning] = React.useState(null)
+    const [file, setFile] = React.useState(null)
     const [voterData, setVoterData] = React.useState({
         name:'',
         aadhar:'',
         voter:'',
         dob:''
     })
+    const dispatch = useDispatch()
     const styles = useStyles()
 
     const handleChange = (e) => {
@@ -21,12 +25,37 @@ const VoterRegistration = () => {
         console.log(e.target.value)
     }
 
+    const handleImage = (e) => {
+        setFile(e.target.files[0])
+    }
+
     const handleSubmit = () => {
         if(voterData.name==='' || voterData.aadhar==='' || voterData.voter==='' || voterData.dob===''){
-            setWarning(true)
+            setWarning('Please fill all the details properly.')
+        }
+        else if(file === null){
+            setWarning('Fingerprint not found')
         }
         else{
-            console.log(voterData)
+            const formData = new FormData()
+            formData.append('name', voterData.name)
+            formData.append('aadhar', voterData.aadhar)
+            formData.append('voter', voterData.voter)
+            formData.append('dob', voterData.dob)
+            formData.append('fingerprint', file)
+
+            // for (const pair of formData.entries()) {
+            //     console.log(pair[0] + ', ' + pair[1])
+            // }
+
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+
+            dispatch(submitVoter({formData, config}))
+            // console.log(voterData)
         }
     }
 
@@ -46,7 +75,7 @@ const VoterRegistration = () => {
                     <br/>
                         <Paper elevation={0} sx={{backgroundColor:'#ffe800'}} className={styles.warningBox}>
                             <Typography paragraph sx={{fontWeight:'bold'}}>
-                                Please fill all the details properly.
+                                {warning}
                             </Typography>
                         </Paper>
                     <br/>
@@ -89,7 +118,7 @@ const VoterRegistration = () => {
                 />
                 <br/>
                 <br/>
-                <input type='file' name='img' accept='image/*' />
+                <input type='file' name='img' accept='image/*' onChange={handleImage} />
                 <br/>
                 <br/>
                 <Button variant='contained' onClick={handleSubmit}>
