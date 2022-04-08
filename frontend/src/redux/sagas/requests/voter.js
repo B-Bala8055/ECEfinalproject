@@ -6,3 +6,7 @@ export const submitVoterRequest = (data) => {
     // }
     return API.post('/voter', data.formData, data.config)
 }
+
+export const getVoterRequest = (data) => {
+    return API.get(`/voter?aadhar=${data.aadhar}&dob=${data.dob}`)
+}

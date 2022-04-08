@@ -19,7 +19,6 @@ const VoterRegistration = () => {
 
     const handleChange = (e) => {
         setpartyData({...partyData, [e.target.name]:e.target.value})
-        console.log(e.target.value)
     }
 
     const handleSubmit = () => {

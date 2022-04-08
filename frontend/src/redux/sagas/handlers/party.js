@@ -6,7 +6,7 @@ function * submitPartyHandler (action) {
     try{
         const {payload} = action
         const data = yield call(submitPartyRequest, payload)
-        console.log("Server reached", data)
+        console.log("Registered successfully", data)
     }
     catch(err){
         console.log('submitPartyHandler section', err)

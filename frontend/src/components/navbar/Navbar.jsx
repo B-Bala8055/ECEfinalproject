@@ -81,7 +81,8 @@ const Navbar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem onClick={()=>{
+              <MenuItem 
+                onClick={()=>{
                 handleCloseNavMenu()
                 navigate('/voter')
                 }}
@@ -90,14 +91,24 @@ const Navbar = () => {
                   Voter Registration
                 </Typography>
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                onClick={()=>{
+                  handleCloseNavMenu()
+                  navigate('/party')
+                  }}
+              >
                 <Typography>
                   Party Registration
                 </Typography>
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                onClick={()=>{
+                  handleCloseNavMenu()
+                  navigate('/voterinfo')
+                  }}
+              >
                 <Typography>
-                    Voter Status Check
+                    Find Voter
                 </Typography>
               </MenuItem>
             </Menu>
@@ -121,16 +132,22 @@ const Navbar = () => {
                 Voter Registration
               </Button>
               <Button
-                onClick={handleCloseNavMenu}
+                onClick={()=>{
+                  handleCloseNavMenu()
+                  navigate('/party')
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Party Registration
               </Button>
               <Button
-                onClick={handleCloseNavMenu}
+                onClick={()=>{
+                  handleCloseNavMenu()
+                  navigate('/voterinfo')
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Voter Status Check
+                Find Voter
               </Button>
           </Box>
 

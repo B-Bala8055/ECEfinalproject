@@ -14,3 +14,6 @@ Image in database reference link: https://www.geeksforgeeks.org/upload-and-retri
 ### code:04
 Added party registration  
 Added getParties server function  
+
+### code:05
+Added checkVoter  

@@ -22,7 +22,6 @@ const VoterRegistration = () => {
 
     const handleChange = (e) => {
         setVoterData({...voterData, [e.target.name]:e.target.value})
-        console.log(e.target.value)
     }
 
     const handleImage = (e) => {
