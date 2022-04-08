@@ -10,3 +10,7 @@ Added redux and redux-saga. submitting voter info reached backend
 Database added  
 voter data and fingerprint sent to database from backend  
 Image in database reference link: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/  
+
+### code:04
+Added party registration  
+Added getParties server function  

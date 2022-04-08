@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const cors = require('cors')
 const voterRouter = require('./router/routes/voter')
+const partyRouter = require('./router/routes/party')
 
 const app = express()
 app.use(express.json())
@@ -11,6 +12,7 @@ app.use(cors())
 dotenv.config()
 
 app.use('/voter', voterRouter)
+app.use('/party', partyRouter)
 
 const PORT = 5000
 

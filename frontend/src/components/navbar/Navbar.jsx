@@ -11,11 +11,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import {useNavigate} from 'react-router-dom'
 
-const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const ResponsiveAppBar = () => {
+const Navbar = () => {
+
+  const navigate = useNavigate()
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -78,12 +81,18 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <MenuItem>
-                <Typography>Link Aadhar and Voter</Typography>
+              <MenuItem onClick={()=>{
+                handleCloseNavMenu()
+                navigate('/voter')
+                }}
+              >
+                <Typography>
+                  Voter Registration
+                </Typography>
               </MenuItem>
               <MenuItem>
                 <Typography>
-                    Register Political Party
+                  Party Registration
                 </Typography>
               </MenuItem>
               <MenuItem>
@@ -103,16 +112,19 @@ const ResponsiveAppBar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Button
-                onClick={handleCloseNavMenu}
+                onClick={()=>{
+                  handleCloseNavMenu()
+                  navigate('/voter')
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Link Aadhar and Voter
+                Voter Registration
               </Button>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Register Political Party
+                Party Registration
               </Button>
               <Button
                 onClick={handleCloseNavMenu}
@@ -156,4 +168,4 @@ const ResponsiveAppBar = () => {
     </AppBar>
   );
 };
-export default ResponsiveAppBar;
+export default Navbar;
