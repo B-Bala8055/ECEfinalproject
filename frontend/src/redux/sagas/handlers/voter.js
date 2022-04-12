@@ -3,6 +3,9 @@ import {getVoter, setVoter, submitVoter} from '../../reducers/voterSlice'
 import {getVoterRequest, submitVoterRequest} from '../requests/voter'
 
 function * submitVoterHandler (action) {
+    /** WORK-FLOW
+     * Call submit voter request 
+     */
     try{
         const {payload} = action
         const data = yield call(submitVoterRequest, payload)
@@ -14,6 +17,9 @@ function * submitVoterHandler (action) {
 }
 
 function * getVoterHandler (action) {
+    /** WORK-FLOW
+     * Call get voter request
+     */
     try{
         const {payload} = action
         const data = yield call(getVoterRequest, payload)

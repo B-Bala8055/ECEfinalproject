@@ -34,23 +34,29 @@ const submitVoterController = async (req, res) => {
 
 const getVoterData = async (req, res) => {
   try {
+    // Get aadhar number and date of birth from query string.
     const { aadhar, dob } = req.query
 
+    // Find the voter with aadhar card
     const voter = await Voter.findOne({ aadhar }).select({
       name: 1, aadhar: 1, voter: 1, dob: 1
     })
 
+    // If voter is not found, send 'No data found' message
     if (voter === null) {
       return res.status(200).json({ confirmation: false, msg: 'No data found' })
     }
 
+    // If voter provides a wrong date of birth, send 'Unauthorized' message
     if (voter.dob !== dob) {
       return res.status(200).json({ confirmation: false, msg: 'Unauthorized' })
     }
 
+    // If voter is found, send voter data
     return res.status(200).json({ confirmation: true, msg: 'Data found', voter })
   }
   catch (err) {
+    // Send error
     res.status(500).json({ confirmation: false, msg: 'Internal Server Error' })
     console.log('getVoterData error', err)
   }

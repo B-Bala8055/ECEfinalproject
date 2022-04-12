@@ -1,5 +1,7 @@
 const Mongoose = require('mongoose')
-
+/**
+ * MongoDB schema for voter
+ */
 const voterModel = new Mongoose.Schema({
   name: { type: String, required: true },
   aadhar: { type: String, required: true },

@@ -1,6 +1,11 @@
 const multer = require('multer')
 const path = require('path')
 
+/**
+ * Backend to handle image uploaded from frontend (FINGERPRINT).
+ * It uploads image to uploads root folder in fp subfolder
+ */
+
 // https://developer.mozilla.org/en-US/docs/Web/API/FormData/get
 
 // used primarily to pass large fileSize error to the user. (Error is not passed from multer

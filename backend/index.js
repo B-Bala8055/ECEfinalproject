@@ -11,11 +11,18 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 dotenv.config()
 
+// Route to handle voter routes
 app.use('/voter', voterRouter)
+// Route to handle political party routes
 app.use('/party', partyRouter)
 
+// Server pport
 const PORT = 5000
 
+/** ESTABLISHING mongodb connection
+ * After connection is established, server is started at port specified
+ * If error, It prints the error
+ */
 mongoose.connect(process.env.MONGODB_CONNECTION_URL)
   .then(() => app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`)))
   .catch((error) => console.log('Error in Establishing connection with database', error))

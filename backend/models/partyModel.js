@@ -1,5 +1,7 @@
 const Mongoose = require('mongoose')
-
+/**
+ * MongoDB schema for political party.
+ */
 const partySchema = Mongoose.Schema({
   party: { type: String, required: true },
   leader: { type: String, required: true }

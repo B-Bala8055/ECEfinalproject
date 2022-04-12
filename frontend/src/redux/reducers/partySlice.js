@@ -4,6 +4,7 @@ const partySlice = createSlice({
     name:'party',
     initialState:{},
     reducers:{
+        // Submit party to backend
         submitParty:()=>{}
     }
 })
