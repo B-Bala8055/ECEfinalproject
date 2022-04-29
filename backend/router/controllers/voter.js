@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const { promisify } = require('util')
+const { spawn } = require('child_process')
 const Voter = require('../../models/voterModel')
 
 const submitVoterController = async (req, res) => {
@@ -9,6 +10,7 @@ const submitVoterController = async (req, res) => {
 
     const voterData = {
       ...voter,
+      votingStatus: false,
       fingerprint: {
         data: fs.readFileSync(path.join(__dirname, '..', '..', 'uploads', 'fp', file.filename)),
         contentType: file.mimetype
@@ -39,7 +41,7 @@ const getVoterData = async (req, res) => {
 
     // Find the voter with aadhar card
     const voter = await Voter.findOne({ aadhar }).select({
-      name: 1, aadhar: 1, voter: 1, dob: 1
+      name: 1, aadhar: 1, voter: 1, dob: 1, votingStatus: 1
     })
 
     // If voter is not found, send 'No data found' message
@@ -62,4 +64,26 @@ const getVoterData = async (req, res) => {
   }
 }
 
-module.exports = { submitVoterController, getVoterData }
+const validateVoter = async (req, res) => {
+  try {
+    let score
+    let matched = false
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')])
+
+    pyfp.stdout.on('data', (data) => {
+      score = Number(data.toString())
+      if (score > 50) {
+        matched = true
+      }
+      res.send(matched)
+    })
+    pyfp.stderr.on('data', (data) => {
+      res.send(data.toString())
+    })
+  }
+  catch (err) {
+    console.log('Validate Voter', err)
+  }
+}
+
+module.exports = { submitVoterController, getVoterData, validateVoter }

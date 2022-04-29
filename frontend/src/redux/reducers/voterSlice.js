@@ -11,6 +11,7 @@ const voterSlice = createSlice({
         // Store voter details fetched
         setVoter:(state, action)=>{
             const {data} = action.payload
+            console.log(data)
             state = {...data}
             return state
         }

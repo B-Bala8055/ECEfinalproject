@@ -87,16 +87,19 @@ const VoterPreview = () => {
                                 :(
                                     <>
                                         <Typography paragraph>
-                                            <b>Name: </b>{voterData.voter.name}
+                                            <b>Name : </b>{voterData.voter.name}
                                         </Typography>
                                         <Typography paragraph>
-                                            <b>Aadhar Number: </b>{voterData.voter.aadhar}
+                                            <b>Aadhar Number : </b>{voterData.voter.aadhar}
                                         </Typography>
                                         <Typography paragraph>
-                                            <b>Voter ID: </b>{voterData.voter.voter}
+                                            <b>Voter ID : </b>{voterData.voter.voter}
                                         </Typography>
                                         <Typography paragraph>
-                                            <b>Date Of Birth: </b>{voterData.voter.dob}
+                                            <b>Date Of Birth : </b>{voterData.voter.dob}
+                                        </Typography>
+                                        <Typography>
+                                            <b>Voted :</b> {voterData.voter.votingStatus ? "Yes" : "No" }
                                         </Typography>
                                     </>
                                 )

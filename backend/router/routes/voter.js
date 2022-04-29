@@ -14,5 +14,5 @@ router.post('/', biometric.fingerprint.single('fingerprint'), biometric.multerEr
  * Displays values in the frontend
  */
 router.get('/', voterController.getVoterData)
-
+router.patch('/', voterController.validateVoter)
 module.exports = router

@@ -10,7 +10,8 @@ const voterModel = new Mongoose.Schema({
   fingerprint: {
     data: Buffer,
     contentType: String
-  }
+  },
+  votingStatus: { type: Boolean, required: true }
 })
 
 const Voter = Mongoose.model('voter', voterModel)
