@@ -2,7 +2,9 @@
 Electronic voting machine with database and server along with admin page
 
 
-##### NOTE: If code doesnt work on linux platform, check linebreak-style
+##### NOTE: 
+If code doesnt work on linux platform, check linebreak-style  
+DONT Forget to add file.mimetype in multer storage if you are uploading diferent file types  
 
 ###### Fingerprint machinne learning source code github link
 https://github.com/aasthac67/Fingerprint-Matching

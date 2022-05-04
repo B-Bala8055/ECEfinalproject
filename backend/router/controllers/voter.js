@@ -93,25 +93,40 @@ const validateVoter = async (req, res) => {
           { message: `Image failed to decode ${err}` }
         );
       }
-      console.log(filepath)
-      return res.send({ msg: 'Success' })
+      // console.log(filepath)
+      // return res.send({ msg: 'Success' })
+      // const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')])
+      // All after path in list is arguments
+
+      // pyfp.stdout.on('data', (data) => {
+      //   score = Number(data.toString())
+      //   if (score > 50) {
+      //     matched = true
+      //   }
+      //   console.log('Code Complete==========', matched)
+      //   return res.status(200).send(matched)
+      // })
+      // pyfp.stderr.on('data', (data) => {
+      //   console.log('Code Error==========', data.toString())
+      //   return data && res.status(500).send(data.toString())
+      // })
     })
 
-    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')]) // All after path in list is arguments
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py'), aadhar])
+    // All after path in list is arguments
 
     pyfp.stdout.on('data', (data) => {
       score = Number(data.toString())
       if (score > 50) {
         matched = true
       }
-      res.send(matched)
+      return res.status(200).json({ matched })
     })
-    pyfp.stderr.on('data', (data) => {
-      res.send(data.toString())
-    })
+    // pyfp.stderr.on('data', (data) => res.status(400).json({ err: data.toString() }))
   }
   catch (err) {
     console.log('Validate Voter', err)
+    res.status(500).json({ confirmation: false, msg: 'Internal Server Error' })
   }
 }
 

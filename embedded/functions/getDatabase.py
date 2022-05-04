@@ -36,7 +36,7 @@ def fetchVoterData(aadhar):
         return 'No Data Found'
 
 
-def castVote(aadhar, fp):
+def castVote(aadhar):
     # https://stackoverflow.com/questions/29104107/upload-image-using-post-form-data-in-python-requests
 
     # import os
@@ -49,4 +49,13 @@ def castVote(aadhar, fp):
     #     with requests.Session() as s:
     #         r = s.post(url, files=files)
     #         print(r.status_code)
-    print("Helo, Refer The above stackoverflow thread")
+    # path_img = 'D:\FINAL YR PROJ\ECEfinalproject\embedded\fps'+aadhar+'.jpeg'
+    path_img = 'D:\\FINAL YR PROJ\\ECEfinalproject\\embedded\\fps\\'+aadhar + '.jpg'
+    with open(path_img, 'rb') as img:
+        name_img = os.path.basename(path_img)
+        files = {
+            'fingerprint': (name_img, img, 'image/jpg', {'Expires': '0'})}
+        with requests.Session() as s:
+            r = s.patch(SERVER_URL+f'/voter?aadhar={aadhar}', files=files)
+            print(r.status_code)
+    # print("Helo, Refer The above stackoverflow thread")
