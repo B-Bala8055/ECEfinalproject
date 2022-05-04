@@ -25,7 +25,7 @@ const multerStorage = multer.diskStorage({
     // Setting req.voter to req.body(text data from xhr)
     req.voter = req.body
     const ext = file.mimetype.split('/')[1]
-    cb(null, `fp-${Date.now()}.${ext}`)
+    cb(null, `${req.body.aadhar}.${ext}`)
   }
 })
 

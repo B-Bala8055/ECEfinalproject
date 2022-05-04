@@ -1,4 +1,5 @@
 const path = require('path')
+const base64Img = require('base64-img');
 const fs = require('fs')
 const { promisify } = require('util')
 const { spawn } = require('child_process')
@@ -8,11 +9,17 @@ const submitVoterController = async (req, res) => {
   try {
     const { voter, file } = req
 
+    // // read binary data
+    // var bitmap = fs.readFileSync(file);
+    // // convert binary data to base64 encoded string
+    // return new Buffer(bitmap).toString('base64');
+    const binImg = fs.readFileSync(path.join(__dirname, '..', '..', 'uploads', 'fp', file.filename))
+    const baseImg = new Buffer.from(binImg, 'base64').toString('base64')
     const voterData = {
       ...voter,
       votingStatus: false,
       fingerprint: {
-        data: fs.readFileSync(path.join(__dirname, '..', '..', 'uploads', 'fp', file.filename)),
+        data: baseImg,
         contentType: file.mimetype
       }
     }
@@ -44,13 +51,7 @@ const getVoterData = async (req, res) => {
       name: 1, aadhar: 1, voter: 1, dob: 1, votingStatus: 1
     })
 
-    // const fpString = await Voter.findOne({ aadhar }).select({ fingerprint: 1 })
-
-    // const fpImg = new Buffer.alloc(64, fpString.fingerprint, 'base64');
-    // fs.writeFileSync(
-    // `../../python/dataset/databaseFP/stored_fp.${fpString.contentType.split('/')[1]}`, fpImg);
-
-    // If voter is no.t found, send 'No data found' message
+    // If voter is not found, send 'No data found' message
     if (voter === null) {
       return res.status(200).json({ confirmation: false, msg: 'No data found' })
     }
@@ -76,9 +77,27 @@ const getVoterData = async (req, res) => {
 
 const validateVoter = async (req, res) => {
   try {
+    const { aadhar } = req.query
     let score
     let matched = false
-    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')]) // All after path in list is arguments
+
+    const voter = await Voter.findOne({ aadhar }).select({ fingerprint: 1 })
+
+    const fpString = voter._doc.fingerprint.data.toString()
+
+    const prefix = 'data:image/jpeg;base64,'
+
+    base64Img.img(prefix + fpString, './IMG', `${aadhar}`, (err, filepath) => {
+      if (err) {
+        return res.status(500).send(
+          { message: `Image failed to decode ${err}` }
+        );
+      }
+      console.log(filepath)
+      return res.send({ msg: 'Success' })
+    })
+
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py'), storedImage]) // All after path in list is arguments
 
     pyfp.stdout.on('data', (data) => {
       score = Number(data.toString())
