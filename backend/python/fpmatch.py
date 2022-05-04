@@ -1,7 +1,11 @@
 import cv2
 import os
+import sys
 
+# stored_image = sys.argv[1]
+# voter_image = sys.argv[2]
 
+# voter image here
 sample = cv2.imread(
     "D:/FINAL YR PROJ/ECEfinalproject/backend/python/dataset/real_data_trim/00003.bmp")
 # sample = cv2.resize(sample, None, fx=2, fy=2)
@@ -11,6 +15,7 @@ image = None
 filename = None
 kp1, kp2, mp = None, None, None
 
+# All fingerprint images stored in database
 for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/backend/python/dataset/train_data_trim")]:
     fingerprint_image = cv2.imread(
         "D:/FINAL YR PROJ/ECEfinalproject/backend/python/dataset/train_data_trim/" + file)
@@ -46,7 +51,7 @@ for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/backe
         image = fingerprint_image
         kp1, kp2, mp = keypoints_1, keypoints_2, match_points
         # print("matched with" + file + "Score: " + str(len(mp)))
-        break
+        # break
 # print("BEST MATCH: " + filename)
 
 print(str(best_score))

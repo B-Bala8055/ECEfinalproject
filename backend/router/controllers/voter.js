@@ -44,11 +44,21 @@ const getVoterData = async (req, res) => {
       name: 1, aadhar: 1, voter: 1, dob: 1, votingStatus: 1
     })
 
-    // If voter is not found, send 'No data found' message
+    // const fpString = await Voter.findOne({ aadhar }).select({ fingerprint: 1 })
+
+    // const fpImg = new Buffer.alloc(64, fpString.fingerprint, 'base64');
+    // fs.writeFileSync(
+    // `../../python/dataset/databaseFP/stored_fp.${fpString.contentType.split('/')[1]}`, fpImg);
+
+    // If voter is no.t found, send 'No data found' message
     if (voter === null) {
       return res.status(200).json({ confirmation: false, msg: 'No data found' })
     }
 
+    // If the voter is accessed from embedded machine, allow access without dob
+    if (dob === 'privileged') {
+      return res.status(200).json({ confirmation: true, msg: 'Data found', voter })
+    }
     // If voter provides a wrong date of birth, send 'Unauthorized' message
     if (voter.dob !== dob) {
       return res.status(200).json({ confirmation: false, msg: 'Unauthorized' })
@@ -68,7 +78,7 @@ const validateVoter = async (req, res) => {
   try {
     let score
     let matched = false
-    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')])
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')]) // All after path in list is arguments
 
     pyfp.stdout.on('data', (data) => {
       score = Number(data.toString())
