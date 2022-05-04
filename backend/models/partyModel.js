@@ -4,7 +4,8 @@ const Mongoose = require('mongoose')
  */
 const partySchema = Mongoose.Schema({
   party: { type: String, required: true },
-  leader: { type: String, required: true }
+  leader: { type: String, required: true },
+  votes: { type: Number, required: true, default: 0 }
 })
 
 const Party = Mongoose.model('party', partySchema)

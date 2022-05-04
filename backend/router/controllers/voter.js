@@ -97,7 +97,7 @@ const validateVoter = async (req, res) => {
       return res.send({ msg: 'Success' })
     })
 
-    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py'), storedImage]) // All after path in list is arguments
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')]) // All after path in list is arguments
 
     pyfp.stdout.on('data', (data) => {
       score = Number(data.toString())
