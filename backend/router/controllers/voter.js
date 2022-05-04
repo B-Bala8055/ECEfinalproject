@@ -84,10 +84,10 @@ const validateVoter = async (req, res) => {
     const voter = await Voter.findOne({ aadhar }).select({ fingerprint: 1 })
 
     const fpString = voter._doc.fingerprint.data.toString()
+    const fpExt = voter._doc.fingerprint.contentType.split('/')[1]
+    const prefix = `data:image/${fpExt};base64,`
 
-    const prefix = 'data:image/jpeg;base64,'
-
-    base64Img.img(prefix + fpString, './IMG', `${aadhar}`, (err, filepath) => {
+    base64Img.img(prefix + fpString, './python/fingerprint/stored', `${aadhar}`, (err, filepath) => {
       if (err) {
         return res.status(500).send(
           { message: `Image failed to decode ${err}` }

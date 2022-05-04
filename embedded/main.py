@@ -7,8 +7,7 @@ from functions.getDatabase import *
 
 def main():
 
-    print(fetchAllParty())
-    print(fetchVoterData('123123123'))
+    castVote()
 
 
 main()
