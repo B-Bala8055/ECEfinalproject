@@ -93,23 +93,6 @@ const validateVoter = async (req, res) => {
           { message: `Image failed to decode ${err}` }
         );
       }
-      // console.log(filepath)
-      // return res.send({ msg: 'Success' })
-      // const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')])
-      // All after path in list is arguments
-
-      // pyfp.stdout.on('data', (data) => {
-      //   score = Number(data.toString())
-      //   if (score > 50) {
-      //     matched = true
-      //   }
-      //   console.log('Code Complete==========', matched)
-      //   return res.status(200).send(matched)
-      // })
-      // pyfp.stderr.on('data', (data) => {
-      //   console.log('Code Error==========', data.toString())
-      //   return data && res.status(500).send(data.toString())
-      // })
     })
 
     const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py'), aadhar])
@@ -117,8 +100,12 @@ const validateVoter = async (req, res) => {
 
     pyfp.stdout.on('data', (data) => {
       score = Number(data.toString())
-      if (score > 50) {
+      if (score > 36) {
         matched = true
+        console.log('Fingerprint in vote section in server matched')
+      }
+      else {
+        console.log('Fingerprint in vote section in server NOT matched')
       }
       return res.status(200).json({ matched })
     })

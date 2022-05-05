@@ -6,7 +6,7 @@ from functions.getDatabase import *
 
 def main():
 
-    aadhar = '112233'
+    aadhar = '999000'
 
     # change mimetype
     castVote(aadhar)

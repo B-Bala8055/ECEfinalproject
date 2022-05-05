@@ -4,11 +4,20 @@ import sys
 
 # stored_image = sys.argv[1]
 # voter_image = sys.argv[2]
-# aadhar = sys.argv[1]
-aadhar = '112233'
+
+aadhar = sys.argv[1]
 # voter image here
+
+fileName1 = ''
+extName1 = ''
+for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/")]:
+    print(file)
+    if file.startswith(aadhar):
+        fileName = file
+        extName = file.split('.')[1]
+
 sample = cv2.imread(
-    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/stored/" + aadhar + '.jpg')
+    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/stored/" + fileName1)
 # sample = cv2.resize(sample, None, fx=2, fy=2)
 
 best_score = 0
@@ -18,8 +27,17 @@ kp1, kp2, mp = None, None, None
 
 # All fingerprint images stored in database
 # for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/backend/python/dataset/train_data_trim")]:
+
+fileName2 = ''
+extName2 = ''
+for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/")]:
+    print(file)
+    if file.startswith(aadhar):
+        fileName = file
+        extName = file.split('.')[1]
+
 fingerprint_image = cv2.imread(
-    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/" + aadhar + '.jpg')
+    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/" + fileName2)
 
 # fingerprint_image = cv2.resize(fingerprint_image, None, fx=2, fy=2)
 # fingerprint_image = cv2.normalize(
@@ -49,7 +67,7 @@ else:
 if len(match_points) / keypoints * 100 > best_score:
     best_score = len(match_points) / keypoints * 100
     # filename = file
-    filename = aadhar+'.jpg'
+    filename = fileName
     image = fingerprint_image
     kp1, kp2, mp = keypoints_1, keypoints_2, match_points
     # print("matched with" + file + "Score: " + str(len(mp)))
