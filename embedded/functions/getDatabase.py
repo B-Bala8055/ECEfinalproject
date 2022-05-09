@@ -30,10 +30,12 @@ def fetchVoterData(aadhar):
     confirmation = res['confirmation']
 
     if(confirmation == True):
-        voter = {'name': res['voter']['name'], 'dob': res['voter']['dob']}
+        voter = {'found': True,
+                 'name': res['voter']['name'], 'dob': res['voter']['dob']}
         return voter
     else:
-        return 'No Data Found'
+        voter = {'found': False}
+        return voter
 
 
 def registerVoter(aadhar):

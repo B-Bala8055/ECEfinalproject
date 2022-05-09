@@ -1,0 +1,6 @@
+* Do not remove or edit main file (It contains simulation libraries )
+* Created a new lcd.py file
+* Changed main to sample in code from https://www.raspberrypi-spy.co.uk/2012/07/16x2-lcd-module-control-using-python/
+* Called sample function inside main.py 
+* Completed circuit wiring  
+

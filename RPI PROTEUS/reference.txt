@@ -1,0 +1,5 @@
+**************ADAFRUIT lcd display tutorial******************** 
+https://learn.adafruit.com/drive-a-16x2-lcd-directly-with-a-raspberry-pi
+
+****************** RPI LCD interfacing video tutorial *******************
+https://www.youtube.com/playlist?list=PLKGiH5V9SS1iFjYmD7W1n7beJt7Gb8Vy4
