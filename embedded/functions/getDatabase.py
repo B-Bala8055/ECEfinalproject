@@ -36,6 +36,32 @@ def fetchVoterData(aadhar):
         return 'No Data Found'
 
 
+def registerVoter(aadhar):
+
+    fileName = ''
+    extName = ''
+
+    for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/embedded/fps")]:
+        print(file)
+        if file.startswith(aadhar):
+            fileName = file
+            extName = file.split('.')[1]
+
+    if(fileName == ''):
+        print('Error in register vote embedded section. No file Found')
+        return 0
+
+    path_img = 'D:\\FINAL YR PROJ\\ECEfinalproject\\embedded\\fps\\regn\\'+fileName
+
+    with open(path_img, 'rb') as img:
+        name_img = os.path.basename(path_img)
+        files = {
+            'fingerprint': (name_img, img, f'image/{extName}', {'Expires': '0'})}
+        with requests.Session() as s:
+            r = s.post(SERVER_URL+f'/voter?aadhar={aadhar}', files=files)
+            print(r.status_code)
+
+
 def castVote(aadhar):
     # https://stackoverflow.com/questions/29104107/upload-image-using-post-form-data-in-python-requests
 

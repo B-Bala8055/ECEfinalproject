@@ -8,11 +8,29 @@ const Voter = require('../../models/voterModel')
 const submitVoterController = async (req, res) => {
   try {
     const { voter, file } = req
-
     // // read binary data
     // var bitmap = fs.readFileSync(file);
     // // convert binary data to base64 encoded string
     // return new Buffer(bitmap).toString('base64');
+
+    if (Object.keys(req.query).length !== 0) {
+      const binImg = fs.readFileSync(path.join(__dirname, '..', '..', 'uploads', 'fp', file.filename))
+      const baseImg = new Buffer.from(binImg, 'base64').toString('base64')
+      const fingerprint = {
+        data: baseImg,
+        contentType: file.mimetype
+      }
+      await Voter.findOneAndUpdate({ aadhar: req.query.aadhar }, { fingerprint })
+
+      const deleteAsync = promisify(fs.unlink)
+
+      await deleteAsync(path.join(__dirname, '..', '..', 'uploads', 'fp', file.filename))
+
+      console.log('Inside embedded fingerprint updation section')
+
+      return res.status(200).json({ msg: 'FIngerprint updated successfully' })
+    }
+    console.log('Not inside the loop')
     const binImg = fs.readFileSync(path.join(__dirname, '..', '..', 'uploads', 'fp', file.filename))
     const baseImg = new Buffer.from(binImg, 'base64').toString('base64')
     const voterData = {

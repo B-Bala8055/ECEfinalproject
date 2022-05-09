@@ -35,6 +35,7 @@
             "off"
         ],
         "consistent-return": ["off"],
-        "no-underscore-dangle":"off"
+        "no-underscore-dangle":"off",
+        "new-cap":"off"
     }
 }

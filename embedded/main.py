@@ -8,8 +8,7 @@ def main():
 
     aadhar = '999000'
 
-    # change mimetype
-    castVote(aadhar)
+    registerVoter(aadhar)
 
 
 main()
