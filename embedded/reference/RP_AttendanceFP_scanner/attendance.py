@@ -59,7 +59,7 @@ def print_grab():
         f.convertImage(0x01)
 
         # Searches template
-        result = f.searchTemplate()q
+        result = f.searchTemplate()
 
         positionNumber = result[0]
 
