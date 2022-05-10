@@ -38,55 +38,33 @@ def fetchVoterData(aadhar):
         return voter
 
 
-def registerVoter(aadhar):
+def registerVoter(aadhar, imgPath):
 
-    fileName = ''
-    extName = ''
-
-    for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/embedded/fps")]:
-        print(file)
-        if file.startswith(aadhar):
-            fileName = file
-            extName = file.split('.')[1]
-
-    if(fileName == ''):
-        print('Error in register vote embedded section. No file Found')
-        return 0
-
-    path_img = 'D:\\FINAL YR PROJ\\ECEfinalproject\\embedded\\fps\\regn\\'+fileName
+    path_img = imgPath
+    ext_name = imgPath.split('.')[1]
 
     with open(path_img, 'rb') as img:
         name_img = os.path.basename(path_img)
         files = {
-            'fingerprint': (name_img, img, f'image/{extName}', {'Expires': '0'})}
+            'fingerprint': (name_img, img, f'image/{ext_name}', {'Expires': '0'})}
         with requests.Session() as s:
             r = s.post(SERVER_URL+f'/voter?aadhar={aadhar}', files=files)
-            print(r.status_code)
+            return r.status_code
 
 
-def castVote(aadhar):
+def castVote(aadhar, imgPath):
     # https://stackoverflow.com/questions/29104107/upload-image-using-post-form-data-in-python-requests
 
-    # Find The fingerprint
-    fileName = ''
-    extName = ''
-    for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/embedded/fps")]:
-        print(file)
-        if file.startswith(aadhar):
-            fileName = file
-            extName = file.split('.')[1]
-
-    if(fileName == ''):
-        print('Error in caste vote embedded section. No file Found')
-        return 0
     # Image file path (Fingerprint is stored in this path)
-    path_img = 'D:\\FINAL YR PROJ\\ECEfinalproject\\embedded\\fps\\'+fileName
+    path_img = imgPath
+    ext_name = imgPath.split('.')[1]
 
     # XHR request
     with open(path_img, 'rb') as img:
         name_img = os.path.basename(path_img)
         files = {
-            'fingerprint': (name_img, img, f'image/{extName}', {'Expires': '0'})}
+            'fingerprint': (name_img, img, f'image/{ext_name}', {'Expires': '0'})}
         with requests.Session() as s:
             r = s.patch(SERVER_URL+f'/voter?aadhar={aadhar}', files=files)
-            print(r.status_code)
+            """********* MUST RETURN IF THE VOTE IS CASTED OR NOT ********"""
+            print(r)

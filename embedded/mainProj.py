@@ -4,7 +4,8 @@ import datetime
 import time
 # Embedded libs
 import I2C_LCD_driver
-
+from pyfingerprint.pyfingerprint import PyFingerprint
+import tempfile
 # CUSTOM LIBS
 from functions.getDatabase import *
 
@@ -23,6 +24,122 @@ aadhar = ''
 # student = ''
 # r = ''
 # person = ''
+
+"""******************************* FINGERPRINT START*******************************"""
+
+
+def finger(type):
+    try:
+        f = PyFingerprint('/dev/serial0', 57600, 0xFFFFFFFF, 0x00000000)
+    except Exception:
+        print('The fingerprint sensor could not be initialized!')
+        print('')
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('ERROR 0000', 2)
+        mylcd.lcd_display_string('  FAILED', 3)
+        main_menu()
+    else:
+        # Gets some sensor information
+        print('Currently used templates: ' +
+              str(f.getTemplateCount()) + '/' + str(f.getStorageCapacity()))
+        print('')
+
+        if (type == 'vote'):
+            print_grab()
+        else:
+            print_regn()
+
+
+def print_grab():
+    global aadhar
+    try:
+        f = PyFingerprint('/dev/serial0', 57600, 0xFFFFFFFF, 0x00000000)
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('  FINGER PRINT  ', 1)
+        mylcd.lcd_display_string('  VERIFICATION  ', 2)
+        mylcd.lcd_display_string('Keep your finger', 4)
+        print('*Waiting For Finger*')
+        print('')
+        # Wait that finger is read
+        while f.readImage() == False:
+            pass
+
+        print('Downloading image (this might take a while)...')
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('  PROCESSING... ', 2)
+        mylcd.lcd_display_string('  Please wait!  ', 3)
+
+        imageDestination = tempfile.gettempdir() + '/fingerprint.bmp'
+        f.downloadImage(imageDestination)
+
+        print('The image was saved to "' + imageDestination + '".')
+
+        response = castVote(aadhar, imageDestination)
+
+        """******* THIS IS INCOMPLETE *******"""
+
+    except Exception as e:
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('ERROR 0001', 2)
+        mylcd.lcd_display_string('  FAILED ', 3)
+        print('Operation failed!')
+        print('Exception message: ' + str(e))
+
+        time.sleep(3)
+        main_menu()
+
+
+def print_regn():
+    global aadhar
+    try:
+        f = PyFingerprint('/dev/serial0', 57600, 0xFFFFFFFF, 0x00000000)
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('  FINGER PRINT  ', 1)
+        mylcd.lcd_display_string('  VERIFICATION  ', 2)
+        mylcd.lcd_display_string('Keep your finger', 4)
+        print('*Waiting For Finger*')
+        print('')
+        # Wait that finger is read
+        while f.readImage() == False:
+            pass
+
+        print('Downloading image (this might take a while)...')
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('  PROCESSING... ', 2)
+        mylcd.lcd_display_string('  Please wait!  ', 3)
+
+        imageDestination = tempfile.gettempdir() + '/fingerprint.bmp'
+        f.downloadImage(imageDestination)
+
+        print('The image was saved to "' + imageDestination + '".')
+
+        response = registerVoter(aadhar, imageDestination)
+
+        if(response != 200):
+            mylcd.lcd_clear()
+            mylcd.lcd_display_string(' NOT REGISTERED ', 2)
+            mylcd.lcd_display_string('  Contact admin  ', 3)
+            time.sleep(3)
+            main_menu()
+        else:
+            mylcd.lcd_clear()
+            mylcd.lcd_display_string('   REGISTERED   ', 2)
+            mylcd.lcd_display_string('  SUCCESSFULLY  ', 3)
+            time.sleep(3)
+            main_menu()
+
+    except Exception as e:
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string('ERROR 0002', 2)
+        mylcd.lcd_display_string('  FAILED ', 3)
+        print('Operation failed!')
+        print('Exception message: ' + str(e))
+
+        time.sleep(3)
+        main_menu()
+
+
+"""******************************* FINGERPRINT END*******************************"""
 
 """******************************* MAIN MENU START*******************************"""
 
@@ -92,7 +209,6 @@ def confirm_aadhar(key):
     if key == '#':
         print(pressed_keys)
         if len(pressed_keys) == 12:
-
             # Find the voter from server
             voter = fetchVoterData(pressed_keys)
 
@@ -127,7 +243,7 @@ def confirm_aadhar(key):
                 print('')
 
                 time.sleep(5)
-
+                clear_keys()
                 voter_menu()
 
         else:
@@ -137,7 +253,7 @@ def confirm_aadhar(key):
             print('')
 
             time.sleep(2)
-
+            clear_keys()
             voter_menu()
     else:
         pressed_keys += key
@@ -162,8 +278,9 @@ def fingerprint_verification():
 # Clear keys in pressed Keys
 def clear_keys():
     global pressed_keys
+    global aadhar
     pressed_keys = pressed_keys.replace(pressed_keys, '')
-
+    aadhar = aadhar.replace(aadhar, '')
 # initial options
 
 
