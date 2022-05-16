@@ -11,3 +11,6 @@ https://github.com/aasthac67/Fingerprint-Matching
 ###### EXECUTE PYTHON FINGERPRINT MACHINE LEARNING ALGORITHM INSIDE NODEJS SERVER :-
 https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 https://www.geeksforgeeks.org/run-python-script-node-js-using-child-process-spawn-method/
+
+# AADHAR input - VOTING CODE in embedded section (Incomplete)
+## MOVING TO OTHER BRANCH - no aadhar input 
