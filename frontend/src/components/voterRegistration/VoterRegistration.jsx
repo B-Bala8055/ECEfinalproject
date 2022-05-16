@@ -15,7 +15,8 @@ const VoterRegistration = () => {
         name:'',
         aadhar:'',
         voter:'',
-        dob:''
+        dob:'',
+        ward:''
     })
     const dispatch = useDispatch()
     const styles = useStyles()
@@ -40,6 +41,7 @@ const VoterRegistration = () => {
             formData.append('name', voterData.name)
             formData.append('aadhar', voterData.aadhar)
             formData.append('voter', voterData.voter)
+            formData.append('ward', voterData.ward)
             formData.append('dob', voterData.dob)
             formData.append('fingerprint', file)
 
@@ -103,6 +105,15 @@ const VoterRegistration = () => {
                 fullWidth
                 label="Voter ID"
                 value={voterData.voter}
+                onChange={handleChange}
+                />
+                <br/>
+                <br/>
+                <TextField
+                name="ward"
+                fullWidth
+                label="Ward number"
+                value={voterData.ward}
                 onChange={handleChange}
                 />
                 <br/>

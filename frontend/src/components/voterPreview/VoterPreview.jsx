@@ -3,28 +3,41 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
 import { useSelector, useDispatch } from 'react-redux'
-import {getVoter} from '../../redux/reducers/voterSlice'
-import { TextField } from '@mui/material'
+import {getVoter, grantAccess} from '../../redux/reducers/voterSlice'
+import {clearStatus} from '../../redux/reducers/statusSlice'
 import useStyles from './styles'
 
 const VoterPreview = () => {
     const styles = useStyles()
-    const [warning, setWarning] = React.useState(false)
+    const [warning, setWarning] = React.useState('')
+    const [localWard, setLocalWard] = React.useState('')
     const [values, setValues] = React.useState({
         aadhar:'',
         dob:''
     })
     const voterData = useSelector(state=>state.voterSlice)
+    const status = useSelector(state=>state.statusSlice)
     const dispatch = useDispatch()
 
     const handleChange = (e) => {
         setValues({...values, [e.target.name]:e.target.value})
     }
 
+    const handleWardChange = (e) => {
+        setLocalWard(e.target.value)
+    }
+
+    const handleGrantAccess = (e) => {
+        dispatch(grantAccess({aadhar:voterData.voter.aadhar}))
+        status !== null && setWarning(status.msg)
+    }
+
     const handleSubmit = () => {
         if(values.aadhar === '' || values.dob === ''){
-            setWarning(true)
+            setWarning('Please fill all the details')
         }
         else{
             setWarning(false)
@@ -32,10 +45,28 @@ const VoterPreview = () => {
         }
     }
 
+    React.useEffect(()=>{
+        dispatch(clearStatus())
+    },[dispatch, voterData])
+
   return (
     <>
         <Grid container spacing={2} className={styles.container}>
-            
+            <Grid item xs={12}>
+                <Paper elevation={3} className={styles.paperStyles}>
+                    <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-evenly'}}>
+                    <TextField
+                        label='Enter your ward'
+                        placeholder='Local Ward'
+                        value={localWard}
+                        onChange={handleWardChange}
+                    />
+                    <Typography variant='h3'>
+                        Ward: {localWard}
+                    </Typography>
+                    </Box>
+                </Paper>
+            </Grid>
             <Grid item xs={12} lg={6}>
                 <Paper elevation={3} className={styles.paperStyles}>
                     <Typography variant='h5' color='primary' textAlign='center'>
@@ -43,7 +74,7 @@ const VoterPreview = () => {
                     </Typography>
                     <br/>
                     <br/>
-                    {warning && (<Typography sx={{color:'red', fontSize:18}}>Please enter all the details.</Typography>)}
+                    {warning !== '' && (<Typography sx={{color:'red', fontSize:18}}>{warning}</Typography>)}
                     <br/>
                     <TextField
                         name='aadhar'
@@ -64,8 +95,8 @@ const VoterPreview = () => {
                     />
                     <br/>
                     <br/>
-                    <Button variant='contained' color='primary' onClick={handleSubmit}>
-                        Search
+                    <Button disabled={localWard===''} variant='contained' color='primary' onClick={handleSubmit}>
+                        {localWard===''?'Set ward first':'Search'}
                     </Button>
                 </Paper>
             </Grid>
@@ -96,11 +127,21 @@ const VoterPreview = () => {
                                             <b>Voter ID : </b>{voterData.voter.voter}
                                         </Typography>
                                         <Typography paragraph>
+                                            <b>Ward number : </b>{voterData.voter.ward}
+                                        </Typography>
+                                        <Typography paragraph>
                                             <b>Date Of Birth : </b>{voterData.voter.dob}
                                         </Typography>
                                         <Typography>
                                             <b>Voted :</b> {voterData.voter.votingStatus ? "Yes" : "No" }
                                         </Typography>
+                                        <br/>
+                                        <br/>
+                                        <Box sx={{display:'flex', justifyContent:'center'}}>
+                                            <Button variant='contained' disabled={localWard !== voterData.voter.ward} onClick={handleGrantAccess}>
+                                                {localWard !== voterData.voter.ward?'Ward mismatch':'Grant access'}
+                                            </Button>
+                                        </Box>
                                     </>
                                 )
                             )

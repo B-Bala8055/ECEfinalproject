@@ -1,6 +1,7 @@
 import {takeLatest, call, put} from 'redux-saga/effects'
-import {getVoter, setVoter, submitVoter} from '../../reducers/voterSlice'
-import {getVoterRequest, submitVoterRequest} from '../requests/voter'
+import { clearStatus, setStatus } from '../../reducers/statusSlice'
+import {getVoter, setVoter, submitVoter, grantAccess} from '../../reducers/voterSlice'
+import {getVoterRequest, submitVoterRequest, grantAccessRequest} from '../requests/voter'
 
 function * submitVoterHandler (action) {
     /** WORK-FLOW
@@ -30,6 +31,19 @@ function * getVoterHandler (action) {
     }
 }
 
+function * grantAccessHandler (action) {
+    try{
+        const {payload} = action
+        yield put(clearStatus())
+        const data = yield call(grantAccessRequest, payload)
+        console.log(data)
+        return yield put(setStatus({...data}))
+    }
+    catch(err){
+        console.log('Grant access handler error', err)
+    }
+}
+
 // ********************* S A G A S *************************
 
 export function * submitVoterSaga () {
@@ -38,4 +52,8 @@ export function * submitVoterSaga () {
 
 export function * getVoterSaga () {
     return yield takeLatest(getVoter.type, getVoterHandler)
+}
+
+export function * grantAccessSaga () {
+    return yield takeLatest(grantAccess.type, grantAccessHandler)
 }

@@ -66,7 +66,7 @@ const getVoterData = async (req, res) => {
 
     // Find the voter with aadhar card
     const voter = await Voter.findOne({ aadhar }).select({
-      name: 1, aadhar: 1, voter: 1, dob: 1, votingStatus: 1
+      name: 1, aadhar: 1, voter: 1, dob: 1, votingStatus: 1, ward: 1
     })
 
     // If voter is not found, send 'No data found' message

@@ -10,3 +10,7 @@ export const submitVoterRequest = (data) => {
 export const getVoterRequest = (data) => {
     return API.get(`/voter?aadhar=${data.aadhar}&dob=${data.dob}`)
 }
+
+export const grantAccessRequest = (data) => {
+    return API.post(`/access?aadhar=${data.aadhar}`)
+}

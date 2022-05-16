@@ -8,6 +8,7 @@ const voterSlice = createSlice({
         submitVoter:()=>{},
         // Get voter
         getVoter:()=>{},
+        grantAccess:()=>{},
         // Store voter details fetched
         setVoter:(state, action)=>{
             const {data} = action.payload
@@ -18,5 +19,5 @@ const voterSlice = createSlice({
     }
 })
 
-export const {submitVoter, getVoter, setVoter} = voterSlice.actions
+export const {submitVoter, getVoter, setVoter, grantAccess} = voterSlice.actions
 export default voterSlice.reducer

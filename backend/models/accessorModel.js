@@ -1,8 +1,7 @@
 const Mongoose = require('mongoose')
-/**
- * MongoDB schema for voter
- */
-const voterModel = new Mongoose.Schema({
+
+const accessorModel = new Mongoose.Schema({
+  accessorId: { type: String, required: true },
   name: { type: String, required: true },
   aadhar: { type: String, required: true },
   voter: { type: String, required: true },
@@ -15,6 +14,6 @@ const voterModel = new Mongoose.Schema({
   votingStatus: { type: Boolean, required: true }
 })
 
-const Voter = Mongoose.model('voter', voterModel)
+const Accessor = Mongoose.model('accessor', accessorModel)
 
-module.exports = Voter
+module.exports = Accessor

@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const cors = require('cors')
 const voterRouter = require('./router/routes/voter')
 const partyRouter = require('./router/routes/party')
+const accessRouter = require('./router/routes/access')
 
 const app = express()
 app.use(express.json())
@@ -15,6 +16,8 @@ dotenv.config()
 app.use('/voter', voterRouter)
 // Route to handle political party routes
 app.use('/party', partyRouter)
+// Route to handle access granting by the admin
+app.use('/access', accessRouter)
 
 // Server pport
 const PORT = 5000
