@@ -4,7 +4,7 @@ const Voter = require('../../models/voterModel')
 const grantAccess = async (req, res) => {
   try {
     const { aadhar } = req.query
-    console.log('Reached backend', aadhar)
+    // console.log('Reached backend', aadhar)
     const voter = await Voter.findOne({ aadhar })
 
     const data = {

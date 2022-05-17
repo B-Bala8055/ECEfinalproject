@@ -4,6 +4,7 @@ const fs = require('fs')
 const { promisify } = require('util')
 const { spawn } = require('child_process')
 const Voter = require('../../models/voterModel')
+const Party = require('../../models/partyModel')
 
 const submitVoterController = async (req, res) => {
   try {
@@ -95,7 +96,7 @@ const getVoterData = async (req, res) => {
 
 const validateVoter = async (req, res) => {
   try {
-    const { aadhar } = req.query
+    const { aadhar, selection } = req.query
     let score
     let matched = false
 
@@ -121,11 +122,13 @@ const validateVoter = async (req, res) => {
       if (score > 36) {
         matched = true
         console.log('Fingerprint in vote section in server matched')
+
+        Voter.findOneAndUpdate({ aadhar }, { votingStatus: true })
+          .then(() => res.status(200).json({ confirmation: true, msg: 'Vote Casted' }))
       }
       else {
-        console.log('Fingerprint in vote section in server NOT matched')
+        return res.status(200).json({ confirmation: true, msg: 'Fingerprint mismatch. Please contact admin.' })
       }
-      return res.status(200).json({ matched })
     })
     // pyfp.stderr.on('data', (data) => res.status(400).json({ err: data.toString() }))
   }

@@ -12,7 +12,9 @@ const VoterRegistration = () => {
     const [warning, setWarning] = React.useState(null)
     const [partyData, setpartyData] = React.useState({
         party:'',
-        leader:''
+        leader:'',
+        ward:'',
+        constituency:''
     })
     const dispatch = useDispatch()
     const styles = useStyles()
@@ -67,6 +69,24 @@ const VoterRegistration = () => {
                 fullWidth
                 label="Leader"
                 value={partyData.leader}
+                onChange={handleChange}
+                />
+                <br/>
+                <br/>
+                <TextField
+                name="ward"
+                fullWidth
+                label="Ward"
+                value={partyData.ward}
+                onChange={handleChange}
+                />
+                <br/>
+                <br/>
+                <TextField
+                name="constituency"
+                fullWidth
+                label="constituency"
+                value={partyData.constituency}
                 onChange={handleChange}
                 />
                 <br/>
