@@ -4,6 +4,7 @@ const fs = require('fs')
 const { promisify } = require('util')
 const { spawn } = require('child_process')
 const Voter = require('../../models/voterModel')
+const Party = require('../../models/partyModel')
 
 const submitVoterController = async (req, res) => {
   try {
@@ -95,17 +96,44 @@ const getVoterData = async (req, res) => {
 
 const validateVoter = async (req, res) => {
   try {
-    const { aadhar } = req.query
-    let score
-    let matched = false
+    const { selection } = req.query
 
-    const voter = await Voter.findOne({ aadhar }).select({ fingerprint: 1 })
+    const voterDatabase = await Voter.find().select({ fingerprint: 1 })
 
+    voterDatabase.forEach((voter) => {
+      const fpString = voter._doc.fingerprint.data.toString()
+      const fpExt = voter._doc.fingerprint.contentType.split('/')[1]
+      const prefix = `data:image/${fpExt};base64,`
+
+      base64Img.img(prefix + fpString, './python/fingerprint/stored', `${voter._doc._id}`, (err, filepath) => {
+        if (err) {
+          return res.status(500).send(
+            { message: `Image failed to decode ${err}` }
+          );
+        }
+      })
+    })
+
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpcomp.py')])
+
+    pyfp.stdout.on('data', async (data) => {
+      const id = data.toString()
+      console.log(id)
+      if (id !== '') {
+        await Voter.findByIdAndUpdate({ _id: id }, { votingStatus: true }, { new: true })
+        await Party.findOneAndUpdate({ party: selection }, { $inc: { votes: 1 } }, { new: true })
+        return res.status(200).json({ confirmation: true, msg: 'Voted casted' })
+      }
+
+      return res.status(200).json({ confirmation: false, msg: 'Voted not casted! No fp matched' })
+    })
+
+    /*
     const fpString = voter._doc.fingerprint.data.toString()
     const fpExt = voter._doc.fingerprint.contentType.split('/')[1]
     const prefix = `data:image/${fpExt};base64,`
 
-    base64Img.img(prefix + fpString, './python/fingerprint/stored', `${aadhar}`, (err, filepath) => {
+    base64Img.img(prefix + fpString, './python/fingerprint/stored', `${'hello'}`, (err, filepath)=>{
       if (err) {
         return res.status(500).send(
           { message: `Image failed to decode ${err}` }
@@ -113,20 +141,21 @@ const validateVoter = async (req, res) => {
       }
     })
 
-    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py'), aadhar])
+    const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpmatch.py')])
     // All after path in list is arguments
 
-    pyfp.stdout.on('data', (data) => {
+    pyfp.stdout.on('data', async (data) => {
       score = Number(data.toString())
       if (score > 36) {
-        matched = true
         console.log('Fingerprint in vote section in server matched')
+        await Party.findOneAndUpdate({ party: selection }, { $inc: { votes: 1 } }, { new: true })
+        await Voter.findOneAndUpdate({ aadhar }, { votingStatus: true }, { new: true })
+        return res.status(200).json({ confirmation: true, msg: 'Vote casted' })
       }
-      else {
-        console.log('Fingerprint in vote section in server NOT matched')
-      }
-      return res.status(200).json({ matched })
+
+      return res.status(200).json({ confirmation: true,msg: 'Fingerprint mismatch. Contact admin' })
     })
+    */
     // pyfp.stderr.on('data', (data) => res.status(400).json({ err: data.toString() }))
   }
   catch (err) {
