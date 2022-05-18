@@ -98,17 +98,18 @@ const validateVoter = async (req, res) => {
   try {
     const { selection } = req.query
 
-    const voterDatabase = await Voter.find().select({ fingerprint: 1 })
+    const voterDatabase = await Voter.find({ votingStatus: false })
+      .select({ aadhar: 1, votingStatus: 1, fingerprint: 1 })
 
     voterDatabase.forEach((voter) => {
       const fpString = voter._doc.fingerprint.data.toString()
       const fpExt = voter._doc.fingerprint.contentType.split('/')[1]
       const prefix = `data:image/${fpExt};base64,`
 
-      base64Img.img(prefix + fpString, './python/fingerprint/stored', `${voter._doc._id}`, (err, filepath) => {
+      base64Img.img(prefix + fpString, './python/fingerprint/stored', `${voter._doc.aadhar}`, (err, filepath) => {
         if (err) {
-          return res.status(500).send(
-            { message: `Image failed to decode ${err}` }
+          return res.status(500).json(
+            { confirmation: false, message: `Image failed to decode ${err}` }
           );
         }
       })
@@ -117,14 +118,17 @@ const validateVoter = async (req, res) => {
     const pyfp = spawn('python', [path.join(__dirname, '..', '..', 'python', 'fpcomp.py')])
 
     pyfp.stdout.on('data', async (data) => {
-      const id = data.toString()
-      console.log(id)
-      if (id !== '') {
-        await Voter.findByIdAndUpdate({ _id: id }, { votingStatus: true }, { new: true })
+      const aadhar = data.toString().trim()
+      console.log(aadhar)
+      if (aadhar !== '') {
+        await Voter.findOneAndUpdate({ aadhar }, { votingStatus: true }, { new: true })
         await Party.findOneAndUpdate({ party: selection }, { $inc: { votes: 1 } }, { new: true })
+        console.log('Fingerprint matched with someone')
+        fs.rmSync(path.join(__dirname, '..', '..', 'python', 'fingerprint', 'stored'), { recursive: true, force: true })
         return res.status(200).json({ confirmation: true, msg: 'Voted casted' })
       }
-
+      console.log('Fingerprint matched with NO one')
+      fs.rmSync(path.join(__dirname, '..', '..', 'python', 'fingerprint', 'stored'), { recursive: true, force: true })
       return res.status(200).json({ confirmation: false, msg: 'Voted not casted! No fp matched' })
     })
 

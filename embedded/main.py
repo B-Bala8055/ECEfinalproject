@@ -6,9 +6,9 @@ from functions.getDatabase import *
 
 def main():
 
-    aadhar = '999000'
-
-    registerVoter(aadhar)
+    selection = 'ttp'
+    path = 'D:\\FINAL YR PROJ\\ECEfinalproject\\backend\\python\\dataset\\real_data_trim\\00003.bmp'
+    castVote(selection, path)
 
 
 main()

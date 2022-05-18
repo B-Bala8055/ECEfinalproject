@@ -22,9 +22,9 @@ const multerErrorHandler = (err, req, res, next) => {
 const multerStorage = multer.diskStorage({
   destination: path.join('python', 'fingerprint', 'got'),
   filename: (req, file, cb) => {
-    const { aadhar } = req.query
+    // const { aadhar } = req.query
     const ext = file.mimetype.split('/')[1]
-    cb(null, `${aadhar}.${ext}`)
+    cb(null, `${'fingerprint'}.${ext}`)
   }
 })
 

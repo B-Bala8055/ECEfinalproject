@@ -52,7 +52,7 @@ def registerVoter(aadhar, imgPath):
             return r.status_code
 
 
-def castVote(aadhar, imgPath):
+def castVote(selection, imgPath):
     # https://stackoverflow.com/questions/29104107/upload-image-using-post-form-data-in-python-requests
 
     # Image file path (Fingerprint is stored in this path)
@@ -65,6 +65,7 @@ def castVote(aadhar, imgPath):
         files = {
             'fingerprint': (name_img, img, f'image/{ext_name}', {'Expires': '0'})}
         with requests.Session() as s:
-            r = s.patch(SERVER_URL+f'/voter?aadhar={aadhar}', files=files)
+            r = s.patch(
+                SERVER_URL+f'/voter?selection={selection}', files=files)
             """********* MUST RETURN IF THE VOTE IS CASTED OR NOT ********"""
             print(r)

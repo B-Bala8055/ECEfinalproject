@@ -1,8 +1,11 @@
 import cv2
 import os
 
+gotImages = [file for file in os.listdir(
+    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/")]
+
 sample = cv2.imread(
-    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/00000.bmp")
+    "D:/FINAL YR PROJ/ECEfinalproject/backend/python/fingerprint/got/"+gotImages[0])
 
 best_score = 0
 image = None
@@ -46,8 +49,8 @@ for file in [file for file in os.listdir("D:/FINAL YR PROJ/ECEfinalproject/backe
 
         # break
 
-id = filename.split('.')[0]
-print(id)
+aadhar = filename.split('.')[0]
+print(aadhar)
 
 # result = cv2.drawMatches(sample, kp1, image, kp2, mp, None)
 # result = cv2.resize(result, None, fx=4, fy=4)
