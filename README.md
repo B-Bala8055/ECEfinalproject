@@ -12,5 +12,12 @@ https://github.com/aasthac67/Fingerprint-Matching
 https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 https://www.geeksforgeeks.org/run-python-script-node-js-using-child-process-spawn-method/
 
-# AADHAR input - VOTING CODE in embedded section (Incomplete)
-## MOVING TO OTHER BRANCH - no aadhar input 
+### Code workflow
+
+Converted to "No aadhar input - Find user by fingerprint instead" format
+#### code:01
+Completed find user with fingerprint in castVote embedded function  
+complete validateVoter(castVote) in server  
+
+#### code:02
+Typed console code example for embedded. Must translate to Gpio code  

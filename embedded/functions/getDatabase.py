@@ -17,9 +17,14 @@ def fetchAllParty():
     confirmation = res['confirmation']
 
     if(confirmation == True):
-        return res['data']
+        data = res['data']
+        party = []
+        for item in data:
+            temp = item['party']
+            party.append(temp)
+        return party
     else:
-        return "Internal Server Error"
+        return 0
 
 
 def fetchVoterData(aadhar):
@@ -68,4 +73,4 @@ def castVote(selection, imgPath):
             r = s.patch(
                 SERVER_URL+f'/voter?selection={selection}', files=files)
             """********* MUST RETURN IF THE VOTE IS CASTED OR NOT ********"""
-            print(r)
+            return r.status_code
