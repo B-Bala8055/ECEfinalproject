@@ -3,12 +3,14 @@ import createSagaMiddleware from 'redux-saga'
 import rootSaga from './sagas/rootSaga'
 import voterSlice from './reducers/voterSlice'
 import partySlice from './reducers/partySlice'
+import statusSlice from './reducers/statusSlice'
 
 const sagaMiddleware = createSagaMiddleware()
 
 const reducer = combineReducers({
     voterSlice,
-    partySlice
+    partySlice,
+    statusSlice
 })
 
 const store = configureStore({

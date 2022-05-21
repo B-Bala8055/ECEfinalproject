@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { submitParty } from '../../redux/reducers/partySlice'
 import useStyles from './styles'
 
@@ -15,6 +16,7 @@ const VoterRegistration = () => {
         leader:''
     })
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const styles = useStyles()
 
     const handleChange = (e) => {
@@ -27,7 +29,7 @@ const VoterRegistration = () => {
         }
         else{
             console.log(partyData)
-            dispatch(submitParty({...partyData}))
+            dispatch(submitParty({partyData, navigate}))
         }
     }
 

@@ -21,3 +21,9 @@ complete validateVoter(castVote) in server
 
 #### code:02
 Typed console code example for embedded. Must translate to Gpio code  
+
+#### code:03
+Added invalid fn and commented code  
+
+#### code:04
+Completed status page

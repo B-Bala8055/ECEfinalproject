@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useDispatch } from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import {submitVoter} from '../../redux/reducers/voterSlice'
 import useStyles from './styles'
 
@@ -17,6 +18,7 @@ const VoterRegistration = () => {
         voter:'',
         dob:''
     })
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const styles = useStyles()
 
@@ -53,7 +55,7 @@ const VoterRegistration = () => {
                 }
             }
 
-            dispatch(submitVoter({formData, config}))
+            dispatch(submitVoter({formData, config, navigate}))
             // console.log(voterData)
         }
     }

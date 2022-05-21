@@ -5,6 +5,12 @@ const submitPartyController = async (req, res) => {
     const { body } = req
     // console.log('Data reached backend', party)
 
+    const alreadyExists = Party.exists({ party: body.party })
+
+    if (alreadyExists) {
+      return res.status(201).json({ confirmation: false, msg: 'Party already exists' })
+    }
+
     // Create a new political party in database
     await Party.create(body)
 

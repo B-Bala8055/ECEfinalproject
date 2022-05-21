@@ -1,6 +1,7 @@
 import {takeLatest, call, put} from 'redux-saga/effects'
 import {getVoter, setVoter, submitVoter} from '../../reducers/voterSlice'
 import {getVoterRequest, submitVoterRequest} from '../requests/voter'
+import {clearStatus, setStatus} from '../../reducers/statusSlice'
 
 function * submitVoterHandler (action) {
     /** WORK-FLOW
@@ -8,8 +9,11 @@ function * submitVoterHandler (action) {
      */
     try{
         const {payload} = action
+        yield put(clearStatus())
         const data = yield call(submitVoterRequest, payload)
-        return console.log('Worked...', data)
+        yield put(setStatus({...data}))
+        console.log('Worked...', data)
+        return payload.navigate('/status')
     }
     catch(err){
         console.log('submit voter Handler section', err)
