@@ -16,13 +16,13 @@ app.use('/voter', voterRouter)
 // Route to handle political party routes
 app.use('/party', partyRouter)
 
-// Server pport
+// Server port
 const PORT = 5000
-
+const host = '192.168.43.168'
 /** ESTABLISHING mongodb connection
  * After connection is established, server is started at port specified
  * If error, It prints the error
  */
 mongoose.connect(process.env.MONGODB_CONNECTION_URL)
-  .then(() => app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`)))
+  .then(() => app.listen(PORT, host, () => console.log(`Server is running on port ${PORT}...`)))
   .catch((error) => console.log('Error in Establishing connection with database', error))
